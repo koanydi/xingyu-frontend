@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { href: "/services", label: "服务项目" },
   { href: "/process", label: "开发流程" },
   { href: "/cases", label: "案例展示" },
+  { href: "/pricing", label: "一口价" },
 ];
 
 export default function Navbar() {
