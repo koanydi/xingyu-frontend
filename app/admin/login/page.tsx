@@ -24,9 +24,9 @@ export default function AdminLogin() {
       if (res.token) {
         localStorage.setItem("admin_token", res.token);
         localStorage.setItem("admin_user", res.username);
-        router.push("/admin/orders");
+        router.push("/admin/dashboard");
       } else {
-        setError(res.error || "用户名或密码错误");
+        setError("用户名或密码错误");
       }
     } catch {
       setError("网络错误，请检查连接");

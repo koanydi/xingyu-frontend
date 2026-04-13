@@ -2,13 +2,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu, X, Zap, ArrowRight } from "lucide-react";
+import { Menu, X, ShoppingBag, Search } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "/services", label: "服务项目" },
-  { href: "/process", label: "开发流程" },
-  { href: "/cases", label: "案例展示" },
-  { href: "/pricing", label: "一口价" },
+  { href: "/", label: "首页" },
+  { href: "/products", label: "所有商品" },
+  { href: "/order/lookup", label: "订单查询" },
 ];
 
 export default function Navbar() {
@@ -16,100 +15,81 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header style={{
-      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-      background: "rgba(8,12,24,0.85)",
-      backdropFilter: "blur(20px)",
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: 64,
+      background: "rgba(8,12,28,0.85)", backdropFilter: "blur(16px)",
       borderBottom: "1px solid rgba(255,255,255,0.06)",
+      display: "flex", alignItems: "center", padding: "0 24px",
     }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: 64 }}>
-
-          {/* Logo */}
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10,
-              background: "linear-gradient(135deg,#00d4ff,#7c3aed)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <Zap size={18} color="white" />
-            </div>
-            <span style={{
-              fontFamily: "Orbitron, sans-serif", fontWeight: 700, fontSize: 15,
-              color: "white", letterSpacing: "0.02em"
-            }}>
-              星屿工作室
-            </span>
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav style={{ display: "flex", alignItems: "center", gap: 4 }} className="hidden-mobile">
-            {NAV_LINKS.map((link) => {
-              const active = pathname === link.href;
-              return (
-                <Link key={link.href} href={link.href} style={{
-                  padding: "8px 18px", borderRadius: 8,
-                  fontSize: 14, fontWeight: 500, textDecoration: "none",
-                  transition: "all 0.2s",
-                  color: active ? "#00d4ff" : "#94a3b8",
-                  background: active ? "rgba(0,212,255,0.08)" : "transparent",
-                  borderBottom: active ? "2px solid #00d4ff" : "2px solid transparent",
-                }}>
-                  {link.label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* CTA */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }} className="hidden-mobile">
-            <Link href="/order" className="btn-main" style={{ padding: "9px 20px", fontSize: 13, borderRadius: 9 }}>
-              立即下单 <ArrowRight size={14} />
-            </Link>
-          </div>
-
-          {/* Mobile toggle */}
-          <button
-            onClick={() => setOpen(!open)}
-            style={{ background: "none", border: "none", cursor: "pointer", color: "#94a3b8", padding: 4 }}
-            className="show-mobile">
-            {open ? <X size={22} /> : <Menu size={22} />}
-          </button>
+      {/* Logo */}
+      <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+        <div style={{
+          width: 32, height: 32, borderRadius: 8,
+          background: "linear-gradient(135deg,#00d4ff,#7c3aed)",
+          display: "flex", alignItems: "center", justifyContent: "center"
+        }}>
+          <ShoppingBag size={16} color="white" />
         </div>
+        <span style={{ fontFamily: "Orbitron, sans-serif", fontWeight: 700, fontSize: 15, color: "white" }}>
+          星屿发卡
+        </span>
+      </Link>
 
-        {/* Mobile menu */}
-        {open && (
-          <div style={{
-            paddingBottom: 16, display: "flex", flexDirection: "column", gap: 4,
-            borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 12
-          }}>
-            {NAV_LINKS.map((link) => (
-              <Link key={link.href} href={link.href} onClick={() => setOpen(false)} style={{
-                padding: "10px 12px", borderRadius: 8, fontSize: 14,
-                color: pathname === link.href ? "#00d4ff" : "#94a3b8",
-                textDecoration: "none", display: "block",
-                background: pathname === link.href ? "rgba(0,212,255,0.08)" : "transparent",
-              }}>
-                {link.label}
-              </Link>
-            ))}
-            <Link href="/order" onClick={() => setOpen(false)} className="btn-main" style={{ marginTop: 8 }}>
-              立即下单
+      {/* 桌面导航 */}
+      <div style={{ display: "flex", gap: 4, marginLeft: 32, flex: 1 }}>
+        {NAV_LINKS.map(({ href, label }) => {
+          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+          return (
+            <Link key={href} href={href} style={{
+              padding: "6px 14px", borderRadius: 8, fontSize: 13, fontWeight: 500,
+              textDecoration: "none", transition: "all 0.2s",
+              color: active ? "#00d4ff" : "#94a3b8",
+              background: active ? "rgba(0,212,255,0.08)" : "transparent",
+              border: active ? "1px solid rgba(0,212,255,0.2)" : "1px solid transparent",
+            }}>
+              {label}
             </Link>
-          </div>
-        )}
+          );
+        })}
       </div>
 
-      <style>{`
-        @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: block !important; }
-        }
-        @media (min-width: 769px) {
-          .hidden-mobile { display: flex !important; }
-          .show-mobile { display: none !important; }
-        }
-      `}</style>
-    </header>
+      {/* 右侧操作 */}
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <Link href="/order/lookup" style={{
+          padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600,
+          textDecoration: "none", color: "#00d4ff",
+          border: "1px solid rgba(0,212,255,0.3)",
+          background: "rgba(0,212,255,0.06)",
+        }}>
+          查订单
+        </Link>
+      </div>
+
+      {/* 汉堡菜单 */}
+      <button onClick={() => setOpen(!open)} style={{
+        display: "none", background: "none", border: "none", cursor: "pointer",
+        color: "#94a3b8", marginLeft: 12,
+      }} className="nav-hamburger">
+        {open ? <X size={20} /> : <Menu size={20} />}
+      </button>
+
+      {/* 移动端菜单 */}
+      {open && (
+        <div style={{
+          position: "absolute", top: 64, left: 0, right: 0,
+          background: "rgba(8,12,28,0.98)", padding: 16,
+          borderBottom: "1px solid rgba(255,255,255,0.06)",
+        }}>
+          {NAV_LINKS.map(({ href, label }) => (
+            <Link key={href} href={href} onClick={() => setOpen(false)} style={{
+              display: "block", padding: "12px 16px", color: "#94a3b8",
+              textDecoration: "none", borderRadius: 8, fontSize: 14,
+            }}>
+              {label}
+            </Link>
+          ))}
+        </div>
+      )}
+    </nav>
   );
 }
